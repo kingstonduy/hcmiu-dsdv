@@ -1,29 +1,27 @@
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/layout";
-import Home from "./components/home";
-import Blogs from "./components/blog";
-import Contact from "./components/contact";
-import NoPage from "./components/noPage";
-import Example from "./components/example";
-import UsaMap from "./components/usa_map";
+import React, { useState, useEffect } from "react";
+import { Navigation } from "./components/navigation";
+import { Header } from "./components/header";
+import SmoothScroll from "smooth-scroll";
 
-export default function App() {
-    return (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Layout />}>
-                <Route path="*" element={<NoPage />} />
-                <Route index element={<Home />} />
-                <Route path="blogs" element={<Blogs />} />
-                <Route path="contact" element={<Contact />} />
-                <Route path="example" element={<Example />} />
-                <Route path="map" element={<UsaMap />} />
-            </Route>
-        </Routes>
-    </BrowserRouter>
-    );
-}
+export const scroll = new SmoothScroll('a[href*="#"]', {
+  speed: 1000,
+  speedAsDuration: true,
+});
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+const App = () => {
+  return (
+    <div>
+      <Navigation />
+      <Header />
+      {/* <Features data={landingPageData.Features} />
+      <About data={landingPageData.About} />
+      <Services data={landingPageData.Services} />
+      <Gallery data={landingPageData.Gallery} />
+      <Testimonials data={landingPageData.Testimonials} />
+      <Team data={landingPageData.Team} />
+      <Contact data={landingPageData.Contact} /> */}
+    </div>
+  );
+};
+
+export default App;
