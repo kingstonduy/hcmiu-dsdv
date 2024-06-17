@@ -1,8 +1,22 @@
 path {
     pointer-events: all;
-  }
-  path:hover {
+}
+path:hover {
     opacity: 0.50;
     cursor: pointer;
-  }
-  
+}
+.legend {
+    display: flex;
+    flex-direction:column;
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: row;
+    margin: 0 10px;
+}
+.legend-item {
+    width: calc(100% / 11); /* Divide by number of legend steps (10 + 1 for legend title) */
+    text-align: center;
+    padding: 5px;
+}
