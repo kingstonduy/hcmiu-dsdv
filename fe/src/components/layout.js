@@ -1,27 +1,17 @@
 import { Outlet, Link } from "react-router-dom";
 
+import './layout.css'
+
 const Layout = () => {
   return (
     <div>
         <nav>
-            <ul>
+            <ul className="nav_bar">
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link className="nav_bar_link" to="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/blogs">Blogs</Link>
-                </li>
-                <li>
-                    <Link to="/contact">Contact</Link>
-                </li>
-                <li>
-                    <Link to="/noPage">No Page</Link>
-                </li>
-                <li>
-                    <Link to="/example">Example</Link>
-                </li>
-                <li>
-                    <Link to="/map">Map</Link>
+                    <Link className="nav_bar_link" to="/map">Map</Link>
                 </li>
             </ul>
         </nav>

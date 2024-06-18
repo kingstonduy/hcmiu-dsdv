@@ -2,91 +2,126 @@ import React, { useEffect, useState } from 'react';
 import './usa_map.css';
 import USAMap from "react-usa-map";
 import * as d3 from "d3";
+import { StateStatistic } from './state_statistic';
 
 const UsaMap = ({ data }) => {
     const [fillStates, setFillStates] = useState({});
     const [legendItems, setLegendItems] = useState([]);
+    const [selectedState, setSelectedState] = useState(null);
+    const [filteredData, setFilteredData] = useState(null);
 
+    // gộp lại theo state và tính tổng số người mất việc
+    const getNumberOfLaidOffPerState = (data) => {
+        const res = {};
+        data.forEach(d => {
+            if (res[d.state]) {
+                // convert to int then add
+                res[d.state].total_laid_off += Number(d.total_laid_off);
+            } else {
+                res[d.state] = {
+                    state: d.state,
+                    total_laid_off: Number(d.total_laid_off),
+                };
+            }
+        });
+        // Transform the resulting object into an array
+        const resultArray = [];
+        for (const state in res) {
+            if (res.hasOwnProperty(state)) {
+                resultArray.push(res[state]);
+            }
+        }
+
+        return resultArray;
+    }
+
+    // Function to handle click on a state in the map
     const mapHandler = (event) => {
-        alert(event.target.dataset.name);
+        const stateName = event.target.dataset.name;
+        setSelectedState(event.target.dataset.name);
+        // const filtered = data.filter(d => d.state === stateName);
+        // if (filtered.length > 0) {
+        //     setFilteredData(filtered);
+        // } 
     };
 
+    // Effect to set up the color scale and legend items
     useEffect(() => {
+        const arr = getNumberOfLaidOffPerState(data);
 
-        data.forEach((d) => {
-            console.log(d);
-        });
-
-
-        const generateRandomNumbers = () => {
-            const randomNumbers = {};
-            const stateAbbreviations = [
-                "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
-                "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",
-                "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
-            ];
-
-            stateAbbreviations.forEach(state => {
-                randomNumbers[state] = Math.floor(Math.random() * 100) + 1; // Generate random number between 1 and 100
-            });
-
-            return randomNumbers;
-        };
-
+        // Function to create color scale based on total_laid_off values
         const createColorScale = () => {
-            const randomNumbers = generateRandomNumbers();
-            const values = Object.values(randomNumbers);
-            
-            // Define the color scale based on the min and max values of generated numbers
+            const values = arr.map(d => d.total_laid_off); // Convert total_laid_off to numbers
             const colorScale = d3.scaleSequential(d3.interpolateReds)
                                 .domain([d3.min(values), d3.max(values)]);
-
-            return { randomNumbers, colorScale };
+            return colorScale;
         };
 
-        const { randomNumbers, colorScale } = createColorScale();
-        const newFillStates = {};
+        // Generate fillStates object for react-usa-map
+        const generateFillStates = (colorScale) => {
+            const newFillStates = {};
+            arr.forEach(d => {
+                newFillStates[d.state] = {
+                    fill: colorScale(+d.total_laid_off),
+                    title: d.state,
+                };
+            });
+            return newFillStates;
+        };
 
-        // Map each state abbreviation to a color based on its random number
-        Object.keys(randomNumbers).forEach(state => {
-            const randomNumber = randomNumbers[state];
-            newFillStates[state] = {
-                fill: colorScale(randomNumber),
-                title: state.name,
-            };
-        });
+        const colorScale = createColorScale();
+        const fillStates = generateFillStates(colorScale);
 
-        setFillStates(newFillStates);
+        setFillStates(fillStates);
 
-        const legendSteps = 10; // Number of steps in the legend
+        const values = arr.map(d => d.total_laid_off); // Convert total_laid_off to numbers
+
         const legendItems = [];
-        for (let i = 0; i <= legendSteps; i++) {
-            const value = i * 10;
+        const mx = d3.max(values);
+        const num = 10
+        for (let i = 0; i <= mx; i += (mx) / num) {
+            const value = parseInt(i);
             const color = colorScale(value);
             legendItems.push(
-                <div key={i} className="legend-item" style={{ backgroundColor: color }}>
+                <div key={value} className="legend-item" style={{ backgroundColor: color }}>
                     {value}
                 </div>
             );
         }
 
         setLegendItems(legendItems);
-    }, [data]);
+    }, []);
+
 
     return (
-        <div className="App">
-            <h1>USA Map with Random Colors</h1>
+        <div className="usa_page">
             <div className="map-container">
-                <USAMap customize={fillStates} onClick={mapHandler} />
-                <div className="legend">
-                    <div className="legend-title">Color Legend</div>
-                    <div className="legend-items">
-                        {legendItems}
+                <center>
+                    <h1>USA Map with Colors</h1>
+                    <USAMap customize={fillStates} onClick={mapHandler} className="usa_map" />
+
+                    <div className="legend">
+                        <div className="legend-items">
+                            {legendItems}
+                        </div>
+                    </div>
+                </center>
+               
+                
+            </div>
+            {selectedState != null&& (
+                <div className="statistic-container">
+                    <button type="button" class="btn-close" aria-label="Close" onClick={() => setSelectedState(null)}>X</button>
+
+                    <div className="state-data">
+                        <StateStatistic rawdata={data} state = {selectedState}/>
                     </div>
                 </div>
-            </div>
+            )}
+
         </div>
     );
 };
 
 export default UsaMap;
+

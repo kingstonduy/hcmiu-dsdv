@@ -1,0 +1,20 @@
+li {
+    list-style-type: none;
+}
+
+.nav_bar_link {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+
+
+.nav_bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px;
+    background-color: 	#0044ff;
+    text-decoration-color: black;
+    margin: 0;
+}
