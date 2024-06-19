@@ -98,7 +98,7 @@ const UsaMap = ({ data }) => {
             <div className="map-container">
                 <center>
                     <h1>USA Map with Colors</h1>
-                    <USAMap customize={fillStates} onClick={mapHandler} className="usa_map" />
+                    <USAMap customize={fillStates} onClick={mapHandler} className="usa_map"   style={{ width: '50%', height: '500px' }}/>
 
                     <div className="legend">
                         <div className="legend-items">
