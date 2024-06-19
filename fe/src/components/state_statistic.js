@@ -2,6 +2,7 @@ import logo from '../logo.svg';
 import './state_statistic.css';
 import { useEffect, useState, useRef } from 'react';
 import * as d3 from "d3";
+import PieChart from './pie_chart';
 
 export const StateStatistic = ( {rawdata, state} ) => {
     let numberLayoff = 0;
@@ -158,7 +159,9 @@ export const StateStatistic = ( {rawdata, state} ) => {
                     <path d="" fill="none" stroke="white" strokeWidth="5" />
                 </svg> 
             </div>
-            <div class="grid-item">Top Right</div>
+            <div class="grid-item">
+                <PieChart rawdata={rawdata} state={state} />
+            </div>
             <div class="grid-item">
                 Bottom Left
             </div>

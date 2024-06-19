@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UsaMap from "./components/usa_map";
 import { useEffect, useState } from "react";
 import * as d3 from "d3";
+import PieChart from "./components/pie_chart";
 
 
 
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="map" element={<UsaMap data={dataset}/>} />
+                    <Route path="piechart" element={<PieChart rawdata={dataset} state="OH" />} />
                 </Route>
             </Routes>
         </BrowserRouter>
