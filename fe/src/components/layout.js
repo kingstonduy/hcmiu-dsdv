@@ -16,6 +16,9 @@ const Layout = () => {
                 <li>
                     <Link className="nav_bar_link" to="/piechart">Pie Chart</Link>
                 </li>
+                <li>
+                    <Link className="nav_bar_link" to="/barchart">Bar Chart</Link>
+                </li>
             </ul>
         </nav>
 

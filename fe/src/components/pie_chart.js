@@ -28,6 +28,11 @@ function PieChart( {rawdata, state} ) {
             resultArray.push({ label: key, value: val });
         });
 
+        // sorted by value
+        resultArray.sort((a, b) => b.value - a.value);
+        //take top 10
+        resultArray.splice(10);
+
         console.log("resultArray", resultArray)
         return resultArray;
     };
@@ -42,10 +47,10 @@ function PieChart( {rawdata, state} ) {
     };
 
     const width = 500;
-    const height = 250;
+    const height = 600;
     const padding = 20;
 
-    const  radius = Math.min(width, height) / 2;
+    const  radius = 200
 
     const colorScale = d3
         .scaleSequential()
@@ -70,10 +75,10 @@ function PieChart( {rawdata, state} ) {
           .attr('width', width)
           .attr('height', height)
           .append('g')
-          .attr('transform', `translate(${width / 2}, ${(height / 2) })`)
+          .attr('transform', `translate(${width / 2}, ${(height / 2 + 20) })`)
       
-        const innerarc = d3.arc().innerRadius(radius * 0.4).outerRadius(radius * 0.8);
-        const outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
+        const innerarc = d3.arc().innerRadius(radius * 0.3).outerRadius(radius * 0.7);
+        const outerArc = d3.arc().innerRadius(radius * 0.8).outerRadius(radius * 0.8);
       
         const pieGenerator = d3.pie().padAngle(0).value((d) => d.value);
       
@@ -102,7 +107,7 @@ function PieChart( {rawdata, state} ) {
           .attr('alignment-baseline', 'middle')
           .text((d) => d.data.label)
           .attr('fill', 'black')
-          .attr('font-size', '12px') // Set the font size
+          .attr('font-size', '10px') // Set the font size
           .attr('font-weight', 'bold') // Set the font weight
           .transition()
           .duration(1000)
@@ -113,7 +118,7 @@ function PieChart( {rawdata, state} ) {
             return function (t) {
               var d2 = interpolate(t);
               var pos = outerArc.centroid(d2);
-              pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+              pos[0] = radius * (midAngle(d2) < Math.PI  ? 1 : -1);
               return `translate(${pos})`;
             };
           })

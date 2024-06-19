@@ -3,6 +3,7 @@ import './state_statistic.css';
 import { useEffect, useState, useRef } from 'react';
 import * as d3 from "d3";
 import PieChart from './pie_chart';
+import Barchart from './bar_chart';
 
 export const StateStatistic = ( {rawdata, state} ) => {
     let numberLayoff = 0;
@@ -149,8 +150,9 @@ export const StateStatistic = ( {rawdata, state} ) => {
     }, []);
 
     return (
-        <div class="grid-container">
-            <div class="grid-item">
+        <div className='state_stat_container'>
+            <div className="state_stat_left">
+                <div className="state_stat_left_top">
                 <div className='grid1_item1'>
                     <p className=''>State: {getStateFullName(state)}</p>
                     <p className=''>Total number of Layoff: {numberLayoff}</p>
@@ -158,15 +160,15 @@ export const StateStatistic = ( {rawdata, state} ) => {
                 <svg id="chart" ref={svgRef} className="chart_state_num_layoff">
                     <path d="" fill="none" stroke="white" strokeWidth="5" />
                 </svg> 
+                </div>
+                <div className="state_stat_left_bottom">
+                    <Barchart rawdata={rawdata} state={state} />
+                </div>
             </div>
-            <div class="grid-item">
+            <div className="state_stat_right">
                 <PieChart rawdata={rawdata} state={state} />
             </div>
-            <div class="grid-item">
-                Bottom Left
-            </div>
-            <div class="grid-item">Bottom Right</div>
-    </div>
+        </div>
     );
 };
 

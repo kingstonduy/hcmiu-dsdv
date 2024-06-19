@@ -111,7 +111,9 @@ const UsaMap = ({ data }) => {
             </div>
             {selectedState != null&& (
                 <div className="statistic-container">
-                    <button type="button" class="btn-close" aria-label="Close" onClick={() => setSelectedState(null)}>X</button>
+                    <div className='cls_btn_div'>
+                        <button type="button" size="30px" class="btn-close" aria-label="Close" onClick={() => setSelectedState(null)}>X</button>
+                    </div>
 
                     <div className="state-data">
                         <StateStatistic rawdata={data} state = {selectedState}/>
